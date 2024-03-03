@@ -1,0 +1,13 @@
+procs:
+  user:
+    shell: zsh
+    stop: SIGKILL
+  server:
+    shell: bun i && bun dev
+    stop: SIGTERM
+  psql:
+    shell: psql postgres://postgres:postgres@localhost:5432/fedimint-extension-server
+    stop: SIGINT
+  fedimint-http-client:
+    shell: cd ../fedimint-http && cargo run
+    stop: SIGTERM

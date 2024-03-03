@@ -1,6 +1,14 @@
 {
   "name": "my-project",
   "module": "index.ts",
+  "scripts": {
+    "start": "bun start",
+    "dev": "bun run src/index.ts",
+    "prisma": "prisma",
+    "migrate": "bunx prisma migrate dev --name init",
+    "hash": "bun run scripts/hashes.ts",
+    "seed": "psql $DATABASE_URL -f sql/seed.sql"
+  },
   "devDependencies": {
     "bun-types": "^1.0.1"
   },
@@ -8,6 +16,8 @@
   "dependencies": {
     "@eelkevdbos/elysia-basic-auth": "^1.4.1",
     "@elysiajs/bearer": "^0.8.0",
-    "elysia": "^0.8.17"
+    "@prisma/client": "^5.10.2",
+    "elysia": "^0.8.17",
+    "prisma": "^5.10.2"
   }
 }
