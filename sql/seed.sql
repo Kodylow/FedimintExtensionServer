@@ -1,6 +1,7 @@
-INSERT INTO "User" ("token", "userHash", "passwordHash")
+INSERT INTO "AppUser" ("token", "userHash", "saltedPasswordHash")
 VALUES (
-        'EcjRMS1JiEMUZa4joLCJlkPsqZ8IvIg2RUEIIRdloUc=:JgA7ed6jY5cB3DvDKB8vBDBmsRTkMmgeB5+CZknKNLU=',
+        'EcjRMS1JiEMUZa4joLCJlkPsqZ8IvIg2RUEIIRdloUc=:VE1+Yb7FUzmkL+n+eNdMHLuD+e7xRaRLykUuYpFty7Q=',
         'EcjRMS1JiEMUZa4joLCJlkPsqZ8IvIg2RUEIIRdloUc=',
-        'JgA7ed6jY5cB3DvDKB8vBDBmsRTkMmgeB5+CZknKNLU='
+        'VE1+Yb7FUzmkL+n+eNdMHLuD+e7xRaRLykUuYpFty7Q='
     );
+

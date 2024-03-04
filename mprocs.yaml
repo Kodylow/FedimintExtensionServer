@@ -7,7 +7,10 @@ procs:
     stop: SIGTERM
   psql:
     shell: psql postgres://postgres:postgres@localhost:5432/fedimint-extension-server
-    stop: SIGINT
+    stop: SIGKILL
+  # ngrok:
+  #   shell: ngrok http http://localhost:8080
+  #   stop: SIGTERM
   fedimint-http-client:
     shell: cd ../fedimint-http && cargo run
     stop: SIGTERM
