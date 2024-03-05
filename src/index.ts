@@ -105,10 +105,7 @@ new Elysia()
         return user.balance;
     })
     .post("/await-invoice", async ({ user, set, body }: any) => {
-        const awaitInvoiceReq = {
-            operationId: body.operationId,
-        };
-
+        console.log("user starting balance", user.balance);
         const decoded = bolt11.decode(body.invoice, body.invoice.startsWith("lntbs")
             ? {
                 bech32: "tbs",
@@ -118,19 +115,47 @@ new Elysia()
             }
             : undefined,);
 
-        console.log("decoded", decoded);
-        const response = await fedimint.ln.awaitInvoice(body);
-        console.log("response", response);
-        return response;
+        const amount = decoded.millisatoshis;
+        if (amount == null) {
+            set.status = 400;
+            return "Invalid request: Amount not found";
+        }
+
+        const operationId: string | undefined = decoded.tags.find(
+            x => x.tagName === "payment_hash"
+        )?.data as string | undefined
+        if (operationId == null) {
+            set.status = 400;
+            return "Invalid request: Payment hash not found";
+        }
+
+        const awaitInvoiceReq = {operationId};
+        const response = await fedimint.ln.awaitInvoice(awaitInvoiceReq);
+        if (response == null) {
+            set.status = 500;
+            return "Internal server error";
+        }
+        // invoice paid, increment user's balance by amount in invoice
+        user = await prisma.appUser.update({
+            where: {
+                token: user.token,
+            },
+            data: {
+                balance: {
+                    increment: parseInt(amount, 10),
+                },
+            },
+        });
+        console.log("New balance", user.balance);
+        return user.balance;
     }, {
         body: t.Object({
-            operationId: t.String(),
             invoice: t.String(),
         })
     })
     .post("/create-invoice", async ({ user, set, body }: any) => {
+        console.log("Create invoice body", body);
         const response = await fedimint.ln.createInvoice(body);
-        console.log("response", response);
         return response;
     }, {
         body: t.Object({
